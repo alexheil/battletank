@@ -36,7 +36,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 
     if (GetSightRayHitLocation(OutHitLocation))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player is not working!"));
+        UE_LOG(LogTemp, Warning, TEXT("aim!"));
     }
 
     // get world location if line trace through crosshair
