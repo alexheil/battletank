@@ -36,7 +36,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 
     if (GetSightRayHitLocation(OutHitLocation))
     {
-        // UE_LOG(LogTemp, Warning, TEXT("aim! %s"), *OutHitLocation.ToString());
+        UE_LOG(LogTemp, Warning, TEXT("aim! %s"), *OutHitLocation.ToString());
     }
 
     // get world location if line trace through crosshair
@@ -55,10 +55,23 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
     if (GetLookDirection(ScreenLocation, LookDirection))
     {
         // Line-Trace along that look direction and see what we hit.
-        GetLookVectorHitLocation();
+        GetLookVectorHitLocation(LookDirection, OutHitLocation);
     }
     
     return true;
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const
+{
+    FHitResult HitResult;
+    auto StartLocation = PlayerCameraManager->GetCameraLocation();
+    auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
+    if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
+    {
+        OutHitLocation = HitResult.Location;
+        return true;
+    }
+    return false;
 }
 
 // Deproject the screen position of the crosshair to a world direction
