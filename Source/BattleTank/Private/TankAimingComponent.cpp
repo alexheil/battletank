@@ -17,27 +17,39 @@ void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
 	Barrel = BarrelToSet;
 }
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
+void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
 {
-	Super::BeginPlay();
+	if (!Barrel) { return; }
 
-	// ...
+	FVector OutLaunchVelocity(0);
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+
+	// calculate out launch velocity
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		OutHitLocation,
+		LaunchSpeed,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	);
+	if (bHaveAimSolution)
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+	}
+
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+	// work out difference between curret barrel rotation and aim direction
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
 	
+	// move the barrel the right amount this frame
+
+	// given the max elevation speed and the frame time
 }
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-void UTankAimingComponent::AimAt(FVector OutHitLocation)
-{
-	auto OurTankName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s is aiming at %s"), *OurTankName, *OutHitLocation.ToString());
-}
-
