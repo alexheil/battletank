@@ -15,11 +15,11 @@ void ATankPlayerController::BeginPlay()
     auto ControlledTank = GetControlledTank();
     if (!ControlledTank)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player is not working!"));
+        // UE_LOG(LogTemp, Warning, TEXT("Player is not working!"));
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("Player is working %s!"), *(ControlledTank->GetName()));
+        // UE_LOG(LogTemp, Warning, TEXT("Player is working %s!"), *(ControlledTank->GetName()));
     }
 }
 
@@ -33,16 +33,15 @@ void ATankPlayerController::AimTowardsCrosshair()
     if (!GetControlledTank()) { return; }
 
     FVector OutHitLocation; // OUT paramater
-
     if (GetSightRayHitLocation(OutHitLocation))
     {
-        UE_LOG(LogTemp, Warning, TEXT("aim! %s"), *OutHitLocation.ToString());
+        // UE_LOG(LogTemp, Warning, TEXT("aim! %s"), *OutHitLocation.ToString());
+        GetControlledTank()->AimAt(OutHitLocation);
     }
-
-    // get world location if line trace through crosshair
 
 }
 
+// get world location if line trace through crosshair
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const 
 {
     // Find the crosshair position in coordinates 
