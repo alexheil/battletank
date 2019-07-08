@@ -54,9 +54,10 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
     FVector LookDirection;
     if (GetLookDirection(ScreenLocation, LookDirection))
     {
-        UE_LOG(LogTemp, Warning, TEXT("aim! %s"), *LookDirection.ToString());
+        // Line-Trace along that look direction and see what we hit.
+        GetLookVectorHitLocation();
     }
-    // Line-Trace along that look direction and see what we hit.
+    
     return true;
 }
 
