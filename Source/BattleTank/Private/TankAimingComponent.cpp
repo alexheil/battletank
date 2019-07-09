@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "TankBarrel.h"
 #include "TankAimingComponent.h"
 
 // Sets default values for this component's properties
@@ -30,7 +31,11 @@ void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
 		OutLaunchVelocity,
 		StartLocation,
 		OutHitLocation,
-		LaunchSpeed
+		LaunchSpeed,
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 	if (bHaveAimSolution)
 	{
